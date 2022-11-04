@@ -4,10 +4,22 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.50.0',
   defaultReleaseBranch: 'main',
   name: 'clientapp',
-
-  // deps: [],                /* Runtime dependencies of this module. */
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [],             /* Build dependencies for this module. */
-  // packageName: undefined,  /* The "name" in package.json. */
+  scripts: {
+    'upgrade-coremodule': 'yarn upgrade coremodule && cd node_modules/coremodule && yarn build',
+  },
+  gitignore: ['*.swp', '*.swo'],
+  prettier: true,
+  prettierOptions: {
+    settings: {
+      printWidth: 120,
+      singleQuote: true,
+    },
+  },
+  jestOptions: {
+    jestConfig: {
+      transformIgnorePatterns: ['/node_modules\\/(?!coremodule).+\\.[tj]s$'],
+    },
+  },
 });
+project.addDeps('coremodule@https://github.com/diranged/JSII3000-coremodule-example#test');
 project.synth();
